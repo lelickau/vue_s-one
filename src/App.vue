@@ -1,16 +1,22 @@
 <template>
 <div class="container">
-  <BudgetList :list="list"/>
+  <Form @submitForm="onFormSubmit" />
+  <TotalBalance :total="totalBalance" />
+  <BudgetList :list="list" @deleteItem="onDeleteItem"/>
 </div>
 </template>
 
 <script>
 import BudgetList from '@/components/BudgetList.vue';
+import TotalBalance from '@/components/TotalBalance.vue';
+import Form from '@/components/Form.vue';
 
 export default {
   name: 'App',
   components: {
     BudgetList,
+    TotalBalance,
+    Form,
   },
   data: () => ({
     list: {
@@ -27,8 +33,24 @@ export default {
         id: 2,
       },
     },
-
   }),
+  computed: {
+    totalBalance() {
+      return Object.values(this.list).reduce((acc, item) => acc + item.value, 0)
+    }
+  },
+  methods: {
+    onDeleteItem(id) {
+      delete this.list[id];
+    },
+    onFormSubmit(data) {
+      const newObj = {
+        ...data,
+        id: String(Math.random()),
+      };
+      this.list[newObj.id] = newObj;
+    },
+  }
 }
 </script>
 
@@ -44,5 +66,6 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  padding-top: 50px;
 }
 </style>
