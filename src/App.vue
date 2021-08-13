@@ -40,10 +40,15 @@ export default {
     }
   },
   methods: {
-    onDeleteItem(id) {
-      delete this.list[id];
+    onDeleteItem(item) {
+      delete this.list[item.id];
     },
     onFormSubmit(data) {
+      console.log(data);
+      if ((data.type === 'OUTCOME') && (data.value > 0)) {
+        data.value = 0 - data.value;
+      }
+      console.log(data);
       const newObj = {
         ...data,
         id: String(Math.random()),
